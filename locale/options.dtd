@@ -1,0 +1,4 @@
+<!ENTITY preferences.title "720Browser Preferences">
+<!ENTITY settings.label "Settings">
+<!ENTITY enable.label "Connect outside world at startup (enable extension)">
+<!ENTITY enable.key "e">

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<!DOCTYPE window SYSTEM "chrome://t20brs/locale/options.dtd">
+<prefwindow title="&preferences.title;" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" onload="t20brs.options.updateform();">
+  <script type="application/x-javascript" src="chrome://t20brs/content/options.js" />
+  <prefpane label="&preferences.title;">
+    <preferences>
+      <preference id="sm-enable" name="extensions.t20brs.enable" type="bool" />
+    </preferences>
+    <groupbox>
+      <caption label="&settings.label;" />
+      <vbox>
+        <checkbox id="enable" preference="sm-enable" oncommand="t20brs.options.updateform();" label="&enable.label;" accesskey="&enable.key;" />
+      </vbox>
+    </groupbox>
+  </prefpane>
+</prefwindow>

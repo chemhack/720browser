@@ -1,0 +1,5 @@
+component   {72036cf4-a0a6-48ad-85ae-061aa201f008}  components/t20brs.js
+contract    @720browser.com/t20brs;1  {72036cf4-a0a6-48ad-85ae-061aa201f008}
+category    profile-after-change 720Browser @720browser.com/t20brs;1
+content     t20brs   chrome/content/
+locale      t20brs   en-US locale/
