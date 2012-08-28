@@ -5,7 +5,7 @@ set ipaddr [lrange $argv 2 2]
 set localport [lrange $argv 3 3]
 set timeout -1
 # now connect to remote UNIX box (ipaddr) with given script to execute
-spawn ssh -o StrictHostKeyChecking=no -D $localport -l $user $ipaddr
+spawn ssh -N -o StrictHostKeyChecking=no -D $localport -l $user $ipaddr
 match_max 100000
 # Look for passwod prompt
 expect "*?assword:*"
