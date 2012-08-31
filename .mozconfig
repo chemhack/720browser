@@ -8,8 +8,8 @@ ac_add_options --with-distribution-id=com.720browser
 ac_add_options --enable-chrome-format=omni
 
 # ac_add_options --enable-warnings-as-errors
-# ac_add_options --with-l10n-base=$HOME/mozilla/l10n-beta
-# ac_add_options --enable-ui-locale=zh-CN
+ac_add_options --with-l10n-base=$HOME/mozilla/l10n-release
+ac_add_options --enable-ui-locale=zh-CN
 
 mk_add_options MOZ_BUILD_PROJECTS="x86_64"
 mk_add_options MOZ_MAKE_FLAGS="-s -j9"

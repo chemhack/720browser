@@ -1,0 +1,55 @@
+diff -r 0d4d25ef06e1 browser/chrome/browser/browser.dtd
+--- a/browser/chrome/browser/browser.dtd	Fri Jun 22 07:27:26 2012 +0800
++++ b/browser/chrome/browser/browser.dtd	Fri Aug 31 11:33:21 2012 +0800
+@@ -648,8 +648,13 @@ just addresses the organization to follo
+ <!-- LOCALIZATION NOTE (markupButton.arialabel): The markup button is the button
+ located in front of the breadcrumbs display in the inspector toolbar. The button
+ doesn't display any label, but exposes a label to screen-readers with "aria-label".
+ -->
+ <!ENTITY markupButton.arialabel          "标记">
+ <!-- LOCALIZATION NOTE (markupButton.accesskey): The key bound to the Markup panel's
+ toolbar button -->
+ <!ENTITY markupButton.accesskey          "M">
++
++<!ENTITY responsiveDesignTool.accesskey "R">
++<!ENTITY responsiveDesignTool.commandkey "M">
++
++<!ENTITY responsiveDesignTool.label   "Responsive Design View">
+diff -r 0d4d25ef06e1 dom/chrome/dom/dom.properties
+--- a/dom/chrome/dom/dom.properties	Fri Jun 22 07:27:26 2012 +0800
++++ b/dom/chrome/dom/dom.properties	Fri Aug 31 11:33:21 2012 +0800
+@@ -121,8 +121,12 @@ MozBlobBuilderWarning=MozBlobBuilder 已
+ DOMExceptionCodeWarning=DOMException code 属性的使用已过时。请使用 name 代替。
+ # LOCALIZATION NOTE: Do not translate "__exposedProps__"
+ NoExposedPropsWarning=未使用 __exposedProps__  即暴露 chrome JS 对象至内容是不安全的而且是过时的。请参见 https://developer.mozilla.org/en/XPConnect_wrappers 以获取更多信息。
+ # LOCALIZATION NOTE: Do not translate "Mutation Event" and "MutationObserver"
+ MutationEventWarning=Mutation Events 已废弃。使用 MutationObserver 替代。
+ # LOCALIZATION NOTE: Do not translate "Blob", "mozSlice", or "slice"
+ MozSliceWarning=对 Blob 使用 mozSlice 已过时，请使用 slice 替代。
+ OnuploadprogressWarning=XMLHttpRequest 的 onuploadprogress 属性已过时。
++
++# LOCALIZATION NOTE: Do not translate "java" or "Packages".
++JavaPackagesWarning=Use of the 'java' and 'Packages' DOM objects to access Java functionality is deprecated. Support will be removed soon.
++diff -r -pU0 720brs/chrome/zh-CN/locale/zh-CN/mozapps/plugins/plugins.dtd firefox/chrome/zh-CN/locale/zh-CN/mozapps/plugins/plugins.dtd
+diff -r 0d4d25ef06e1 toolkit/chrome/mozapps/plugins/plugins.dtd
+--- a/toolkit/chrome/mozapps/plugins/plugins.dtd	Fri Jun 22 07:27:26 2012 +0800
++++ b/toolkit/chrome/mozapps/plugins/plugins.dtd	Fri Aug 31 11:33:21 2012 +0800
+@@ -38,8 +38,18 @@
+ <!ENTITY reloadPlugin.post                                   " 重试。">
+ <!-- LOCALIZATION NOTE (report.please): This and the other report.* strings should be as short as possible, ideally 2-3 words. -->
+ <!ENTITY report.please                                       "发送崩溃报告">
+ <!ENTITY report.submitting                                   "正在发送报告…">
+ <!ENTITY report.submitted                                    "崩溃报告已发送。">
+ <!ENTITY report.disabled                                     "禁用崩溃报告。">
+ <!ENTITY report.failed                                       "提交失败。">
+ <!ENTITY report.unavailable                                  "无可用报告。">
++
++<!-- LOCALIZATION NOTE (unsupportedPlatform.learnMore): Mobile only. This text is used to link to a SUMO page explaining why Flash is not
++     supported on this device. Use the unicode ellipsis char, \u2026, or use "..." if \u2026 doesn't suit traditions in your locale. -->
++<!ENTITY unsupportedPlatform.learnMore                       "Learn More…">
++<!-- LOCALIZATION NOTE (unsupportedPlatform.post): Mobile only. Include text here if needed for your locale. -->
++<!ENTITY unsupportedPlatform.post                            "">
++
++<!-- LOCALIZATION NOTE (unsupportedPlatform.pre): Mobile only. Flash (the only plugin available on mobile)
++     is not supported on some devices. Include a trailing space as needed. -->
++<!ENTITY unsupportedPlatform.pre                             "We're very sorry, but &brandShortName; can't play Flash on this device. ">
