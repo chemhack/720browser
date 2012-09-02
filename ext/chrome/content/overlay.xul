@@ -16,8 +16,8 @@
 <toolbarpalette id="BrowserToolbarPalette">
   <toolbarbutton id="aup-toolbarbutton" type="menu-button" pack="end">
 	  <menupopup>
-	    <menuitem label="Open Changed Files"/>
-	    <menuitem label="Open All"/>
+	    <menuitem label="Status: "/>
+        <menuseparator/>
 	  </menupopup>
   </toolbarbutton>
 </toolbarpalette>
