@@ -11,6 +11,7 @@
 	<em:homepageURL>http://720browser.com/</em:homepageURL>
 	<em:optionsURL>chrome://t20brs/content/options.xul</em:optionsURL>
 	<em:iconURL>chrome://t20brs/content/logo.png</em:iconURL>
+	<em:unpack>true</em:unpack>
     <!-- Firefox -->
     <em:targetApplication>
       <Description>
