@@ -36,20 +36,34 @@ t20brs.prototype = {
 
     ssh: function() {
         var arguments = new Array();
-        arguments[0] = 'kcome';
-        arguments[1] = 'kcome233';
-        arguments[2] = '96.47.2.142';
-        arguments[3] = '2333';
+        arguments[0] = '-ssh';
+        arguments[1] = '-l';
+        arguments[2] = 'kcome';
+        arguments[3] = '-pw';
+        arguments[4] = 'kcome233';
+        arguments[5] = '-D';
+        arguments[6] = '2333';
+        arguments[7] = '-N';
+        arguments[8] = '-C';
+        arguments[9] = '96.47.2.142';
         var dirService = Components.classes["@mozilla.org/file/directory_service;1"].
                          getService(Components.interfaces.nsIProperties); 
         // var appDirFile = dirService.get("AChrom", Components.interfaces.nsIFile); // returns an nsIFile object
-        var sshexpect = Components.classes["@mackerron.com/getExtDir;1"]
-  .createInstance().wrappedJSObject.getExtDir().path+"/ssh.expect";
-        myDump(sshexpect);
+	    var osString = Components.classes["@mozilla.org/xre/app-info;1"].getService(Components.interfaces.nsIXULRuntime).OS;
+		var plinkFileName='';
+		if(osString=='Darwin'){
+			plinkFileName='/plink-mac';
+		}else if(osString=='WINNT'){
+			plinkFileName='\\plink-win.exe';
+		}else{
+			plinkFileName='/plink-linux';
+		}
+        var plinkPath = Components.classes["@mackerron.com/getExtDir;1"].createInstance().wrappedJSObject.getExtDir().path+plinkFileName;
+        myDump(plinkPath);
         var executable = Components.classes["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);
-        executable.initWithPath(sshexpect);
+        executable.initWithPath(plinkPath);
         if (!executable.exists()) {
-            myDump(sshexpect+" not exists");
+            myDump(plinkPath+" not exists");
             return;
         } else {
 			//TODO: check permission
