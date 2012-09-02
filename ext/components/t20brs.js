@@ -37,20 +37,22 @@ t20brs.prototype = {
     ssh: function() {
         var arguments = new Array();
         arguments[0] = 'kcome';
-        arguments[1] = 'pa5QzaNN';
-        arguments[2] = '69.163.209.99';
+        arguments[1] = 'kcome233';
+        arguments[2] = '96.47.2.142';
         arguments[3] = '2333';
         var dirService = Components.classes["@mozilla.org/file/directory_service;1"].
                          getService(Components.interfaces.nsIProperties); 
-        var appDirFile = dirService.get("AChrom", Components.interfaces.nsIFile); // returns an nsIFile object
-        var sshexpect = appDirFile.path+"/../720brs/ssh.expect";
+        // var appDirFile = dirService.get("AChrom", Components.interfaces.nsIFile); // returns an nsIFile object
+        var sshexpect = Components.classes["@mackerron.com/getExtDir;1"]
+  .createInstance().wrappedJSObject.getExtDir().path+"/ssh.expect";
         myDump(sshexpect);
         var executable = Components.classes["@mozilla.org/file/local;1"].createInstance(Components.interfaces.nsILocalFile);
         executable.initWithPath(sshexpect);
         if (!executable.exists()) {
-            myDump(sshexpect+"not exists");
+            myDump(sshexpect+" not exists");
             return;
         } else {
+			//TODO: check permission
             var process = Components.classes["@mozilla.org/process/util;1"].createInstance(Components.interfaces.nsIProcess);
             process.init(executable);
             var pid = new Object();

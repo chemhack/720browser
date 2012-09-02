@@ -3,3 +3,9 @@ contract    @720browser.com/t20brs;1  {72036cf4-a0a6-48ad-85ae-061aa201f008}
 category    profile-after-change 720Browser @720browser.com/t20brs;1
 content     t20brs   chrome/content/
 locale      t20brs   en-US locale/
+skin    	t20brs	classic/1.0 chrome/skin/
+style	chrome://t20brs/content/overlay.xul	chrome://t20brs/skin/overlay.css
+component {723079F5-F880-40BB-8283-8266DEA93960} components/getExtDir.js
+contract @mackerron.com/getExtDir;1 {723079F5-F880-40BB-8283-8266DEA93960}
+overlay	chrome://browser/content/browser.xul chrome://t20brs/content/overlay.xul
+
