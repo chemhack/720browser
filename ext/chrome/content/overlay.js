@@ -1,3 +1,4 @@
+const t20brs=Components.classes["@720browser.com/t20brs;1"].getService().wrappedJSObject;
 function sshObserver()
 {
 	this.register();
@@ -7,9 +8,9 @@ sshObserver.prototype = {
 	observe: function(subject, topic, data) {
 		myDump("topic: "+topic+" data: "+data);
 	
-		if(topic=='ssh-connection' && data=='online'){
+		if(topic=='ssh-connection' && data=='refresh'){
 			myDump("online");
-			document.getElementById('t20brs-connectection-status').value='已连接';
+			document.getElementById('t20brs-connectection-status').value=t20brs.status;
 			myDump("OK");
 		}
 		else if(topic=='xul-overlay-merged'){
@@ -31,7 +32,7 @@ function myDump(aMessage) {
 function init(){
 	myDump("init");
 	observer = new sshObserver();
-	Components.classes["@720browser.com/t20brs;1"].getService().wrappedJSObject.notifyStatus();	
+	t20brs.notifyStatus();	
 }
 window.addEventListener("load", function(e) { init(); }, false);
 

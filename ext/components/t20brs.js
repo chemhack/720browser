@@ -1,5 +1,6 @@
 // Based on https://developer.mozilla.org/en/How_to_Build_an_XPCOM_Component_in_Javascript
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
+const XMLHttpRequest = Components.Constructor("@mozilla.org/xmlextras/xmlhttprequest;1");
 
 function t20brs() { // constructor
 	this.wrappedJSObject = this;
@@ -19,6 +20,8 @@ t20brs.prototype = {
     QueryInterface: XPCOMUtils.generateQI([Components.interfaces.nsIStartupMaster]),
 	service: true,
 	process:null,
+	status:'idle', //either idle, connecting, connected, failed
+	clientIP:null, //client ip through proxy detected from https://720browser.com/ip.php
 	observerService:Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService),
 	
     say: function(word) {
@@ -39,6 +42,8 @@ t20brs.prototype = {
     },
 
     ssh: function(server,username,password,localport) {
+		this.status='connecting';
+		this.notifyStatus();
         var arguments = new Array();
         arguments[0] = '-ssh';
         arguments[1] = '-l';
@@ -69,6 +74,8 @@ t20brs.prototype = {
         executable.initWithPath(plinkPath);
         if (!executable.exists()) {
             myDump(plinkPath+" not exists");
+			this.status='failed';
+			this.notifyStatus();
             return;
         } else {
 			//TODO: check permission
@@ -88,12 +95,39 @@ t20brs.prototype = {
             prefs.setCharPref("socks", "127.0.0.1");
             prefs.setIntPref("socks_port", 2333);
             prefs.setIntPref("type", 1);
-			myDump("connected");
-			//Send notification to UI
-			this.observerService.notifyObservers(null, "ssh-connection", "online");
-			myDump("notification sent");
+			
+			//TODO: finish online detection
+			var timer = Components.classes["@mozilla.org/timer;1"].createInstance(Components.interfaces.nsITimer);
+			var this_=this;
+			var event = {
+				notify: function(timer) {
+					this_.detectConnectionStatus.call(this_);
+				}
+			};
+			timer.initWithCallback(event,5000, Components.interfaces.nsITimer.TYPE_ONE_SHOT);
         }
     },
+	
+	detectConnectionStatus:function(){
+		var req = new XMLHttpRequest();
+		req.open('GET', 'https://720browser.com/ip.php', true);
+		req.channel.loadFlags |= Components.interfaces.nsIRequest.LOAD_BYPASS_CACHE;
+		var this_=this;
+		req.onreadystatechange=function(evt){
+			this_.onTestHttpRequestLoad.call(this_,req);
+		};
+		req.send();
+	},
+	
+	onTestHttpRequestLoad:function(req){
+		if(req.readyState==4){
+			myDump("status:"+req.status);
+			if(req.status==200){
+				this.status='connected';
+				this.notifyStatus();				
+			}
+		}
+	},
 	
 	disconnect:function(){
 		if(this.process){
@@ -134,7 +168,7 @@ t20brs.prototype = {
 		this.observerService.removeObserver(this, "quit-application");
 	},
 	notifyStatus:function(){
-		this.observerService.notifyObservers(null, "ssh-connection", "online");
+		this.observerService.notifyObservers(null, "ssh-connection", "refresh");
 	}
 }
 
