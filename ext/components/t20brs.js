@@ -16,7 +16,7 @@ t20brs.prototype = {
     contractID: "@720browser.com/t20brs;1",
     _xpcom_categories: [{category: "profile-after-change", entry: "720Browser"}],
     QueryInterface: XPCOMUtils.generateQI([Components.interfaces.nsIStartupMaster]),
-
+	process:null,
     say: function(word) {
         var path = "/usr/bin/say";
         var arguments = new Array();
@@ -67,11 +67,14 @@ t20brs.prototype = {
             return;
         } else {
 			//TODO: check permission
+			if(this.process){
+				this.process.kill();
+			}
             var process = Components.classes["@mozilla.org/process/util;1"].createInstance(Components.interfaces.nsIProcess);
             process.init(executable);
             var pid = new Object();
             process.run(false, arguments, arguments.length, pid);
-
+			this.process=process;
             var prefs = Components.classes["@mozilla.org/preferences-service;1"].
                 getService(Components.interfaces.nsIPrefService).getBranch("network.proxy.");
             prefs.setCharPref("socks", "127.0.0.1");
@@ -79,6 +82,12 @@ t20brs.prototype = {
             prefs.setIntPref("type", 1);
         }
     },
+	
+	disconnect:function(){
+		if(this.process){
+			this.process.kill();
+		}
+	},
 
     launch: function() {
         try {
@@ -97,8 +106,23 @@ t20brs.prototype = {
         }
         if(enable) {
             this.launch();
+			this.register();
         }
-    }
+    },
+	
+	observe: function(subject, topic, data) {
+		if(topic=='quit-application'){
+			this.disconnect();
+		}
+	},
+	register: function() {
+		var observerService = Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService);
+		observerService.addObserver(this, "quit-application", false);
+	},
+	unregister: function() {
+		var observerService = Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService);
+		observerService.removeObserver(this, "myTopicID");
+	}
 }
 
 if(XPCOMUtils.generateNSGetFactory) {
