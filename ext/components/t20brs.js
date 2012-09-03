@@ -49,7 +49,8 @@ t20brs.prototype = {
         arguments[6] = localport;
         arguments[7] = '-N';
         arguments[8] = '-C';
-        arguments[9] = server;
+        arguments[9] = '-batch';
+        arguments[10] = server;
         var dirService = Components.classes["@mozilla.org/file/directory_service;1"].
                          getService(Components.interfaces.nsIProperties); 
         // var appDirFile = dirService.get("AChrom", Components.interfaces.nsIFile); // returns an nsIFile object
