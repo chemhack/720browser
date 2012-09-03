@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
-<?xml-stylesheet href="chrome://autoproxy/skin/overlay.css" type="text/css"?>
+<?xml-stylesheet href="chrome://t20brs/skin/overlay.css" type="text/css"?>
 <!DOCTYPE overlay >
 <overlay id="status-bar-sample-1-overlay"
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 <!-- Firefox -->
+<script type="application/x-javascript" src="chrome://t20brs/content/overlay.js" />
 <statusbar id="status-bar">
   <statusbarpanel id="status-bar-info"
     label="Hello World"
@@ -13,13 +14,27 @@
   />
 </statusbar>
 
-<toolbarpalette id="BrowserToolbarPalette">
-  <toolbarbutton id="aup-toolbarbutton" type="menu-button" pack="end">
-	  <menupopup>
-	    <menuitem label="Status: "/>
-        <menuseparator/>
-	  </menupopup>
-  </toolbarbutton>
-</toolbarpalette>
+<toolbox id="navigator-toolbox">
+    
+    <toolbar id="TutTB-Toolbar" toolbarname="Tutorial Toolbar" accesskey="T"
+             class="chromeclass-toolbar" context="toolbar-context-menu" 
+             hidden="false" persist="hidden">
+			                         			
+			<menulist id="t20brs-serverlist">
+			  <menupopup>
+			    <menuitem label="美国1（50.115.163.51）" value="50.115.163.51"/>
+			    <menuitem label="美国2（199.175.48.149）" value="199.175.48.149"/>
+			    <menuitem label="美国3（208.115.203.49）" value="208.115.203.49"/>
+			    <menuitem label="美国4（69.85.86.249）" value="69.85.86.249"/>
+			    <menuitem label="美国5（96.47.2.142）" value="96.47.2.142"/>
+			    <menuitem label="美国6（209.141.51.102）" value="209.141.51.102"/>
+			  </menupopup>
+			</menulist>
+			                
+            <toolbarbutton id="t20brs-connect-button" label="连接" oncommand="init()" />
+            <toolbarseparator />
+			<label id="t20brs-connectection-status" value="未连接" />
+    </toolbar>
+</toolbox>
 
 </overlay>

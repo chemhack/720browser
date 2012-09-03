@@ -2,6 +2,7 @@
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 
 function t20brs() { // constructor
+	this.wrappedJSObject = this;
     this.init();
 }
 
@@ -16,7 +17,10 @@ t20brs.prototype = {
     contractID: "@720browser.com/t20brs;1",
     _xpcom_categories: [{category: "profile-after-change", entry: "720Browser"}],
     QueryInterface: XPCOMUtils.generateQI([Components.interfaces.nsIStartupMaster]),
+	service: true,
 	process:null,
+	observerService:Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService),
+	
     say: function(word) {
         var path = "/usr/bin/say";
         var arguments = new Array();
@@ -34,18 +38,18 @@ t20brs.prototype = {
         }
     },
 
-    ssh: function() {
+    ssh: function(server,username,password,localport) {
         var arguments = new Array();
         arguments[0] = '-ssh';
         arguments[1] = '-l';
-        arguments[2] = 'kcome';
+        arguments[2] = username;
         arguments[3] = '-pw';
-        arguments[4] = 'kcome233';
+        arguments[4] = password;
         arguments[5] = '-D';
-        arguments[6] = '2333';
+        arguments[6] = localport;
         arguments[7] = '-N';
         arguments[8] = '-C';
-        arguments[9] = '96.47.2.142';
+        arguments[9] = server;
         var dirService = Components.classes["@mozilla.org/file/directory_service;1"].
                          getService(Components.interfaces.nsIProperties); 
         // var appDirFile = dirService.get("AChrom", Components.interfaces.nsIFile); // returns an nsIFile object
@@ -67,6 +71,9 @@ t20brs.prototype = {
             return;
         } else {
 			//TODO: check permission
+			if(!executable.isExecutable()){
+				executable.permissions=755;
+			}
 			if(this.process){
 				this.process.kill();
 			}
@@ -80,6 +87,10 @@ t20brs.prototype = {
             prefs.setCharPref("socks", "127.0.0.1");
             prefs.setIntPref("socks_port", 2333);
             prefs.setIntPref("type", 1);
+			myDump("connected");
+			//Send notification to UI
+			this.observerService.notifyObservers(null, "ssh-connection", "online");
+			myDump("notification sent");
         }
     },
 	
@@ -91,7 +102,7 @@ t20brs.prototype = {
 
     launch: function() {
         try {
-            this.ssh();
+            this.ssh('199.175.48.149','kcome','kcome233','2333');
         } catch(err) {
             Components.utils.reportError(err);
         }
@@ -116,15 +127,18 @@ t20brs.prototype = {
 		}
 	},
 	register: function() {
-		var observerService = Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService);
-		observerService.addObserver(this, "quit-application", false);
+		this.observerService.addObserver(this, "quit-application", false);
 	},
 	unregister: function() {
-		var observerService = Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService);
-		observerService.removeObserver(this, "myTopicID");
+		this.observerService.removeObserver(this, "quit-application");
+	},
+	notifyStatus:function(){
+		this.observerService.notifyObservers(null, "ssh-connection", "online");
 	}
 }
 
-if(XPCOMUtils.generateNSGetFactory) {
-    var NSGetFactory = XPCOMUtils.generateNSGetFactory([t20brs]);
-}
+var components = [t20brs];
+if (XPCOMUtils.generateNSGetFactory) 
+  var NSGetFactory = XPCOMUtils.generateNSGetFactory(components); // FF4, Gecko 2
+else 
+  var NSGetModule = XPCOMUtils.generateNSGetModule(components); // FF3, Gecko 1.9

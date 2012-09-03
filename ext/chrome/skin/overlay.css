@@ -1,8 +1,1 @@
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
-
-#aup-toolbarbutton
-{
-    list-style-image: url("logo.png");
-    -moz-image-region: rect(0px, 24px, 24px, 0px);
-    width: auto;
-}
