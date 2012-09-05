@@ -1,0 +1,17 @@
+diff -r -pU8 ./Contents/MacOS/application.ini /Volumes/720Browser/720Browser.app/Contents/MacOS/application.ini
+--- ./Contents/MacOS/application.ini	2012-09-03 18:17:52.000000000 +0800
++++ /Volumes/720Browser/720Browser.app/Contents/MacOS/application.ini	2012-08-31 11:01:55.000000000 +0800
+@@ -1,11 +1,11 @@
+ [App]
+-Vendor=720browser.com
+-Name=720Browser
++Vendor=Mozilla
++Name=Firefox
+ Version=15.0
+ BuildID=20120831105858
+ ID={ec8030f7-c20a-464f-9b0e-13a3a9e97384}
+ 
+ [Gecko]
+ MinVersion=15.0
+ MaxVersion=15.0
+ 
