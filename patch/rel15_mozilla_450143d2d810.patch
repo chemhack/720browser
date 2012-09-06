@@ -1,7 +1,30 @@
 diff -r 450143d2d810 browser/app/nsBrowserApp.cpp
 --- a/browser/app/nsBrowserApp.cpp	2012-08-25 06:28:46.000000000 +0800
-+++ b/browser/app/nsBrowserApp.cpp	2012-09-05 14:40:59.000000000 +0800
-@@ -148,18 +148,23 @@ static int do_main(int argc, char* argv[
++++ b/browser/app/nsBrowserApp.cpp  2012-09-06 17:51:59.000000000 +0800
+@@ -32,16 +32,22 @@
+ #define strcasecmp _stricmp
+ #endif
+ #include "BinaryPath.h"
+ 
+ #include "nsXPCOMPrivate.h" // for MAXPATHLEN and XPCOM_DLL
+ 
+ #include "mozilla/Telemetry.h"
+ 
++#define T20BRS 1
++
++#ifdef T20BRS
++#include <libproc.h>
++#endif
++
+ static void Output(const char *fmt, ... )
+ {
+   va_list ap;
+   va_start(ap, fmt);
+ 
+ #if defined(XP_WIN) && !MOZ_WINCONSOLE
+   PRUnichar msg[2048];
+   _vsnwprintf(msg, sizeof(msg)/sizeof(msg[0]), NS_ConvertUTF8toUTF16(fmt).get(), ap);
+@@ -148,18 +154,34 @@ static int do_main(int argc, char* argv[
      if (NS_FAILED(rv)) {
        Output("Couldn't read application.ini");
        return 255;
@@ -11,14 +34,24 @@ diff -r 450143d2d810 browser/app/nsBrowserApp.cpp
      return result;
    }
 -
--  return XRE_main(argc, argv, &sAppData, 0);
-+  const char *username = getenv("LOGNAME");
-+  char lasdir[1024];
-+  sprintf(lasdir, "/Users/%s/Library/Application Support/720Browser", username);
++#ifdef T20BRS
++  char buf[4096];
++  int ret;
++  pid_t pid; 
++  pid = getpid();
++  ret = proc_pidpath (pid, buf, sizeof(buf));
++  if (ret <= 0)
++    return XRE_main(argc, argv, &sAppData, 0);
++  buf[ret-8] = 0; // removing "/firefox"
++  char profdir[4096];
++  sprintf(profdir, "%s/720Browser", buf);
 +  char* firefox = "firefox";
 +  char* profile = "-profile";
-+  char* argvv[] = {firefox, profile, lasdir};
++  char* argvv[] = {firefox, profile, profdir};
 +  return XRE_main(3, argvv, &sAppData, 0);
++#else
+   return XRE_main(argc, argv, &sAppData, 0);
++#endif
  }
  
  #ifdef XP_WIN
