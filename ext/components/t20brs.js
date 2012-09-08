@@ -159,6 +159,8 @@ t20brs.prototype = {
 	observe: function(subject, topic, data) {
 		if(topic=='quit-application'){
 			this.disconnect();
+		}else if(top=='wake_notification'){
+			this.lauch();
 		}
 	},
 	register: function() {
