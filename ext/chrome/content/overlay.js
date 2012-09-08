@@ -1,4 +1,5 @@
 const t20brs=Components.classes["@720browser.com/t20brs;1"].getService().wrappedJSObject;
+
 function sshObserver()
 {
 	this.register();
@@ -9,18 +10,20 @@ sshObserver.prototype = {
 		myDump("topic: "+topic+" data: "+data);
 	
 		if(topic=='ssh-connection' && data=='refresh'){
-			myDump("online");
-			document.getElementById('t20brs-connectection-status').value=t20brs.status;
-			myDump("OK");
-		}
-		else if(topic=='xul-overlay-merged'){
-			myDump("xul-overlay-merged");
+			var status=t20brs.status;
+			if(status=='connecting'){
+				document.getElementById('t20brs-connect-button').disabled=true;
+			}else{
+				document.getElementById('t20brs-connect-button').disabled=false;
+				
+			}
+			document.getElementById('t20brs-connectection-status').value=status;
+			document.getElementById('t20brs-connectection-clientIP').value=t20brs.clientIP;
 		}
 	},
 	register: function() {
 		var observerService = Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService);
 		observerService.addObserver(this, "ssh-connection", false);
-		observerService.addObserver(this, "xul-overlay-merged", false);
 	}
 }
 
@@ -29,10 +32,18 @@ function myDump(aMessage) {
     consoleService.logStringMessage("t20brs: " + aMessage);
 }
 
+function connect(){
+	var server=document.getElementById('t20brs-serverlist').value;
+	myDump(server);
+	t20brs.disconnect();
+	t20brs.ssh(server,'kcome','kcome233','2333','22');
+}
+
 function init(){
 	myDump("init");
-	observer = new sshObserver();
+	var observer = new sshObserver();
 	t20brs.notifyStatus();	
 }
+
 window.addEventListener("load", function(e) { init(); }, false);
 

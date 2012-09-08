@@ -14,6 +14,10 @@
   />
 </statusbar>
 
+<toolbarpalette id="BrowserToolbarPalette">
+	<toolbarbutton label="720browsers" id="t20brs-toolbar-button" type="menu-button"/>
+</toolbarpalette>
+
 <toolbox id="navigator-toolbox">
     
     <toolbar id="TutTB-Toolbar" toolbarname="Tutorial Toolbar" accesskey="T"
@@ -22,6 +26,7 @@
 			                         			
 			<menulist id="t20brs-serverlist">
 			  <menupopup>
+  			    <menuitem label="日本1（106.187.103.253）" value="106.187.103.253"/>
 			    <menuitem label="美国1（50.115.163.51）" value="50.115.163.51"/>
 			    <menuitem label="美国2（199.175.48.149）" value="199.175.48.149"/>
 			    <menuitem label="美国3（208.115.203.49）" value="208.115.203.49"/>
@@ -31,8 +36,9 @@
 			  </menupopup>
 			</menulist>
 			                
-            <toolbarbutton id="t20brs-connect-button" label="连接" oncommand="init()" />
+            <toolbarbutton id="t20brs-connect-button" label="连接" oncommand="connect()" />
             <toolbarseparator />
+			<label id="t20brs-connectection-clientIP" value="" />
 			<label id="t20brs-connectection-status" value="未连接" />
     </toolbar>
 </toolbox>

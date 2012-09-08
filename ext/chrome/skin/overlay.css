@@ -1,1 +1,10 @@
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+#t20brs-toolbar-button {
+  list-style-image: url("chrome://t20brs/skin/button-24.png");
+  
+}
+
+toolbar[iconsize="small"] #t20brs-toolbar-button {
+  list-style-image: url("chrome://t20brs/skin/button-16.png");
+}

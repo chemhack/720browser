@@ -1,6 +1,7 @@
 // Based on https://developer.mozilla.org/en/How_to_Build_an_XPCOM_Component_in_Javascript
 Components.utils.import("resource://gre/modules/XPCOMUtils.jsm");
 const XMLHttpRequest = Components.Constructor("@mozilla.org/xmlextras/xmlhttprequest;1");
+const timer = Components.classes["@mozilla.org/timer;1"].createInstance(Components.interfaces.nsITimer);
 
 function t20brs() { // constructor
 	this.wrappedJSObject = this;
@@ -20,8 +21,10 @@ t20brs.prototype = {
     QueryInterface: XPCOMUtils.generateQI([Components.interfaces.nsIStartupMaster]),
 	service: true,
 	process:null,
-	status:'idle', //either idle, connecting, connected, failed
-	clientIP:null, //client ip through proxy detected from https://720browser.com/ip.php
+	status:'idle', //either idle, connecting, connected, failed, reconnect
+	clientIP:'', //client ip through proxy detected from https://720browser.com/ip.php
+	connectAttempStart:0,
+	reconnectInfo:{},
 	observerService:Components.classes["@mozilla.org/observer-service;1"].getService(Components.interfaces.nsIObserverService),
 	
     say: function(word) {
@@ -41,9 +44,14 @@ t20brs.prototype = {
         }
     },
 
-    ssh: function(server,username,password,localport) {
+    ssh: function(server,username,password,localport,remoteport) {
+		if(this.status=='connected'){
+			this.disconnect();
+		}
 		this.status='connecting';
 		this.notifyStatus();
+		this.connectAttempStart=new Date().getTime();
+		this.reconnectInfo={'server':server,'username':username,'password':password,'localport':localport,'remoteport':remoteport};
         var arguments = new Array();
         arguments[0] = '-ssh';
         arguments[1] = '-l';
@@ -78,33 +86,30 @@ t20brs.prototype = {
 			this.notifyStatus();
             return;
         } else {
-			//TODO: check permission
 			if(!executable.isExecutable()){
 				executable.permissions=755;
 			}
-			if(this.process){
+			if(this.process&&this.process.isRunning){
 				this.process.kill();
 			}
             var process = Components.classes["@mozilla.org/process/util;1"].createInstance(Components.interfaces.nsIProcess);
             process.init(executable);
-            var pid = new Object();
-            process.run(false, arguments, arguments.length, pid);
+            process.runAsync(arguments, arguments.length,this);
 			this.process=process;
             var prefs = Components.classes["@mozilla.org/preferences-service;1"].
                 getService(Components.interfaces.nsIPrefService).getBranch("network.proxy.");
             prefs.setCharPref("socks", "127.0.0.1");
             prefs.setIntPref("socks_port", 2333);
             prefs.setIntPref("type", 1);
+			prefs.setBoolPref("socks_remote_dns",true);
 			
-			//TODO: finish online detection
-			var timer = Components.classes["@mozilla.org/timer;1"].createInstance(Components.interfaces.nsITimer);
 			var this_=this;
 			var event = {
 				notify: function(timer) {
 					this_.detectConnectionStatus.call(this_);
 				}
 			};
-			timer.initWithCallback(event,5000, Components.interfaces.nsITimer.TYPE_ONE_SHOT);
+			timer.initWithCallback(event,1000, Components.interfaces.nsITimer.TYPE_ONE_SHOT);
         }
     },
 	
@@ -112,6 +117,7 @@ t20brs.prototype = {
 		var req = new XMLHttpRequest();
 		req.open('GET', 'https://720browser.com/ip.php', true);
 		req.channel.loadFlags |= Components.interfaces.nsIRequest.LOAD_BYPASS_CACHE;
+		req.timeout=10000;
 		var this_=this;
 		req.onreadystatechange=function(evt){
 			this_.onTestHttpRequestLoad.call(this_,req);
@@ -120,24 +126,48 @@ t20brs.prototype = {
 	},
 	
 	onTestHttpRequestLoad:function(req){
-		if(req.readyState==4){
-			myDump("status:"+req.status);
-			if(req.status==200){
-				this.status='connected';
-				this.notifyStatus();				
+		if(this.status=='connecting'){
+			if(req.readyState==4){
+				myDump("status:"+req.status);
+				myDump("time:"+(new Date().getTime()-this.connectAttempStart));			
+				if(req.status==200){
+					this.clientIP=req.responseText;
+					this.status='connected';
+					this.notifyStatus();				
+				}else{
+					if((new Date().getTime()-this.connectAttempStart)>20000){
+						this.status='failed';
+						this.notifyStatus();
+						this.disconnect();				
+					}else{
+						var this_=this;
+						var event = {
+							notify: function(timer) {
+								this_.detectConnectionStatus.call(this_);
+							}
+						};
+						timer.initWithCallback(event,500, Components.interfaces.nsITimer.TYPE_ONE_SHOT);
+					}
+				}
 			}
 		}
 	},
 	
 	disconnect:function(){
-		if(this.process){
+        var prefs = Components.classes["@mozilla.org/preferences-service;1"].
+            getService(Components.interfaces.nsIPrefService).getBranch("network.proxy.");
+        prefs.setIntPref("type", 5);
+		if(this.process&&this.process.isRunning){
 			this.process.kill();
 		}
+		this.clientIP='';
+		this.status='idle';
+		this.notifyStatus();
 	},
 
     launch: function() {
         try {
-            this.ssh('199.175.48.149','kcome','kcome233','2333');
+            this.ssh('106.187.103.253','kcome','kcome233','2333','22');
         } catch(err) {
             Components.utils.reportError(err);
         }
@@ -159,8 +189,20 @@ t20brs.prototype = {
 	observe: function(subject, topic, data) {
 		if(topic=='quit-application'){
 			this.disconnect();
-		}else if(top=='wake_notification'){
-			this.lauch();
+		}
+		if(topic=='process-failed'){
+			myDump('process-failed');
+		}
+		if(topic=='process-finished'&&subject==this.process){
+			if(this.status=='connecting'){
+				this.status='fail';
+				myDump(subject.exitValue);
+				this.notifyStatus();
+			}else if(this.status=='connected'){
+				this.status='reconnect';
+				this.notifyStatus();
+	            this.ssh(this.reconnectInfo.server,this.reconnectInfo.username,this.reconnectInfo.password,this.reconnectInfo.localport,this.reconnectInfo.remoteport);
+			}
 		}
 	},
 	register: function() {
