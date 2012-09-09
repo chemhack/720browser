@@ -10,6 +10,7 @@
     <em:creator>Team 720Browser</em:creator>
 	<em:homepageURL>http://720browser.com/</em:homepageURL>
 	<em:optionsURL>chrome://t20brs/content/options.xul</em:optionsURL>
+	<em:updateURL>https://720browser.com/ext/update.rdf</em:updateURL>
 	<em:iconURL>chrome://t20brs/content/logo.png</em:iconURL>
 	<em:unpack>true</em:unpack>
     <!-- Firefox -->
