@@ -1,0 +1,244 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		341B015C15FE407200C42FBF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 341B015B15FE407200C42FBF /* Foundation.framework */; };
+		341B015F15FE407200C42FBF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 341B015E15FE407200C42FBF /* main.m */; };
+		341B016315FE407200C42FBF /* hwid.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 341B016215FE407200C42FBF /* hwid.1 */; };
+		341B017315FE51C400C42FBF /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 341B017215FE51C400C42FBF /* Security.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		341B015515FE407200C42FBF /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				341B016315FE407200C42FBF /* hwid.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		341B015715FE407200C42FBF /* hwid */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = hwid; sourceTree = BUILT_PRODUCTS_DIR; };
+		341B015B15FE407200C42FBF /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		341B015E15FE407200C42FBF /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		341B016115FE407200C42FBF /* hwid-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "hwid-Prefix.pch"; sourceTree = "<group>"; };
+		341B016215FE407200C42FBF /* hwid.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = hwid.1; sourceTree = "<group>"; };
+		341B017215FE51C400C42FBF /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		341B015415FE407200C42FBF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				341B017315FE51C400C42FBF /* Security.framework in Frameworks */,
+				341B015C15FE407200C42FBF /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		341B014C15FE407200C42FBF = {
+			isa = PBXGroup;
+			children = (
+				341B015D15FE407200C42FBF /* hwid */,
+				341B015A15FE407200C42FBF /* Frameworks */,
+				341B015815FE407200C42FBF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		341B015815FE407200C42FBF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				341B015715FE407200C42FBF /* hwid */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		341B015A15FE407200C42FBF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				341B017215FE51C400C42FBF /* Security.framework */,
+				341B015B15FE407200C42FBF /* Foundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		341B015D15FE407200C42FBF /* hwid */ = {
+			isa = PBXGroup;
+			children = (
+				341B015E15FE407200C42FBF /* main.m */,
+				341B016215FE407200C42FBF /* hwid.1 */,
+				341B016015FE407200C42FBF /* Supporting Files */,
+			);
+			path = hwid;
+			sourceTree = "<group>";
+		};
+		341B016015FE407200C42FBF /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				341B016115FE407200C42FBF /* hwid-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		341B015615FE407200C42FBF /* hwid */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 341B016615FE407200C42FBF /* Build configuration list for PBXNativeTarget "hwid" */;
+			buildPhases = (
+				341B015315FE407200C42FBF /* Sources */,
+				341B015415FE407200C42FBF /* Frameworks */,
+				341B015515FE407200C42FBF /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = hwid;
+			productName = hwid;
+			productReference = 341B015715FE407200C42FBF /* hwid */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		341B014E15FE407200C42FBF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0440;
+				ORGANIZATIONNAME = 720Browser;
+			};
+			buildConfigurationList = 341B015115FE407200C42FBF /* Build configuration list for PBXProject "hwid" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 341B014C15FE407200C42FBF;
+			productRefGroup = 341B015815FE407200C42FBF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				341B015615FE407200C42FBF /* hwid */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		341B015315FE407200C42FBF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				341B015F15FE407200C42FBF /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		341B016415FE407200C42FBF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		341B016515FE407200C42FBF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		341B016715FE407200C42FBF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "hwid/hwid-Prefix.pch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		341B016815FE407200C42FBF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "hwid/hwid-Prefix.pch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		341B015115FE407200C42FBF /* Build configuration list for PBXProject "hwid" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				341B016415FE407200C42FBF /* Debug */,
+				341B016515FE407200C42FBF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		341B016615FE407200C42FBF /* Build configuration list for PBXNativeTarget "hwid" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				341B016715FE407200C42FBF /* Debug */,
+				341B016815FE407200C42FBF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 341B014E15FE407200C42FBF /* Project object */;
+}
