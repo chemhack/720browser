@@ -1,6 +1,6 @@
 diff -r 0b774a1067fe browser/app/nsBrowserApp.cpp
 --- a/browser/app/nsBrowserApp.cpp	Wed Sep 05 14:59:17 2012 -0700
-+++ b/browser/app/nsBrowserApp.cpp	Wed Sep 12 15:50:07 2012 +0800
++++ b/browser/app/nsBrowserApp.cpp	Wed Sep 12 23:39:39 2012 +0800
 @@ -37,6 +37,13 @@
  
  #include "mozilla/Telemetry.h"
@@ -35,8 +35,8 @@ diff -r 0b774a1067fe browser/app/nsBrowserApp.cpp
 +    if (ret>0) {
 +      char useff[MAXPATHLEN];
 +      char env[MAXPATHLEN];
-+      snprintf(useff, MAXPATHLEN, "%s/.use-firefox-profile", container);
-+      if (access(useff, F_OK))
++      snprintf(useff, MAXPATHLEN, "%s/chrome/.use-firefox-profile", container);
++      if (access(useff, F_OK) == 0)
 +        snprintf(env, MAXPATHLEN, "XUL_APP_FILE=%s/application.ini", container);
 +      else
 +        snprintf(env, MAXPATHLEN, "XUL_APP_FILE=%s/720browser.ini", container);
@@ -50,7 +50,7 @@ diff -r 0b774a1067fe browser/app/nsBrowserApp.cpp
    const char *appDataFile = getenv("XUL_APP_FILE");
 diff -r 0b774a1067fe security/nss/lib/ckfw/builtins/certdata.c
 --- a/security/nss/lib/ckfw/builtins/certdata.c	Wed Sep 05 14:59:17 2012 -0700
-+++ b/security/nss/lib/ckfw/builtins/certdata.c	Wed Sep 12 15:50:07 2012 +0800
++++ b/security/nss/lib/ckfw/builtins/certdata.c	Wed Sep 12 23:39:39 2012 +0800
 @@ -726,12 +726,6 @@
  static const CK_ATTRIBUTE_TYPE nss_builtins_types_223 [] = {
   CKA_CLASS,  CKA_TOKEN,  CKA_PRIVATE,  CKA_MODIFIABLE,  CKA_LABEL,  CKA_CERT_SHA1_HASH,  CKA_CERT_MD5_HASH,  CKA_ISSUER,  CKA_SERIAL_NUMBER,  CKA_TRUST_SERVER_AUTH,  CKA_TRUST_EMAIL_PROTECTION,  CKA_TRUST_CODE_SIGNING,  CKA_TRUST_STEP_UP_APPROVED
@@ -191,7 +191,7 @@ diff -r 0b774a1067fe security/nss/lib/ckfw/builtins/certdata.c
  #endif /* DEBUG */
 diff -r 0b774a1067fe security/nss/lib/ckfw/builtins/certdata.txt
 --- a/security/nss/lib/ckfw/builtins/certdata.txt	Wed Sep 05 14:59:17 2012 -0700
-+++ b/security/nss/lib/ckfw/builtins/certdata.txt	Wed Sep 12 15:50:07 2012 +0800
++++ b/security/nss/lib/ckfw/builtins/certdata.txt	Wed Sep 12 23:39:39 2012 +0800
 @@ -15114,115 +15114,6 @@
  CKA_TRUST_STEP_UP_APPROVED CK_BBOOL CK_FALSE
  

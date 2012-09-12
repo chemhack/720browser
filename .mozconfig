@@ -11,6 +11,7 @@ ac_add_options --enable-chrome-format=omni
 ac_add_options --with-l10n-base=$HOME/mozilla/l10n-release
 ac_add_options --enable-ui-locale=zh-CN
 
+mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/../obj-@CONFIG_GUESS@
 mk_add_options MOZ_BUILD_PROJECTS="x86_64"
 mk_add_options MOZ_MAKE_FLAGS="-s -j9"
 mk_add_options AUTOCONF=/usr/local/Cellar/autoconf213/2.13/bin/autoconf213

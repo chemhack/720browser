@@ -6,11 +6,15 @@
   <prefpane label="&preferences.title;">
     <preferences>
       <preference id="sm-enable" name="extensions.t20brs.enable" type="bool" />
+      <preference id="sm-useffprofile" name="extensions.t20brs.useffprofile" type="bool" />
     </preferences>
     <groupbox>
       <caption label="&settings.label;" />
       <vbox>
         <checkbox id="enable" preference="sm-enable" oncommand="t20brs.options.updateform();" label="&enable.label;" accesskey="&enable.key;" />
+      </vbox>
+      <vbox>
+        <checkbox id="useffprofile" preference="sm-useffprofile" oncommand="t20brs.options.updateform();" label="&useffprofile.label;" accesskey="&useffprofile.key;" />
       </vbox>
     </groupbox>
   </prefpane>
