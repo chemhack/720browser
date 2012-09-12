@@ -1,12 +1,7 @@
 diff -r 0b774a1067fe browser/app/nsBrowserApp.cpp
 --- a/browser/app/nsBrowserApp.cpp	Wed Sep 05 14:59:17 2012 -0700
-+++ b/browser/app/nsBrowserApp.cpp	Mon Sep 10 11:44:57 2012 +0800
-@@ -32,16 +32,22 @@
- #define strcasecmp _stricmp
- #endif
- #include "BinaryPath.h"
- 
- #include "nsXPCOMPrivate.h" // for MAXPATHLEN and XPCOM_DLL
++++ b/browser/app/nsBrowserApp.cpp	Wed Sep 12 15:50:07 2012 +0800
+@@ -37,6 +37,13 @@
  
  #include "mozilla/Telemetry.h"
  
@@ -14,61 +9,49 @@ diff -r 0b774a1067fe browser/app/nsBrowserApp.cpp
 +
 +#ifdef T20BRS
 +#include <libproc.h>
++#include <unistd.h>
 +#endif
 +
  static void Output(const char *fmt, ... )
  {
    va_list ap;
-   va_start(ap, fmt);
+@@ -109,6 +116,32 @@
+   nsCOMPtr<nsILocalFile> appini;
+   nsresult rv;
  
- #if defined(XP_WIN) && !MOZ_WINCONSOLE
-   PRUnichar msg[2048];
-   _vsnwprintf(msg, sizeof(msg)/sizeof(msg[0]), NS_ConvertUTF8toUTF16(fmt).get(), ap);
-@@ -148,18 +154,34 @@ static int do_main(int argc, char* argv[
-     if (NS_FAILED(rv)) {
-       Output("Couldn't read application.ini");
-       return 255;
-     }
-     int result = XRE_main(argc, argv, appData, 0);
-     XRE_FreeAppData(appData);
-     return result;
-   }
--
 +#ifdef T20BRS
-+  char buf[4096];
++  char container[MAXPATHLEN];
 +  int ret;
 +  pid_t pid; 
 +  pid = getpid();
-+  ret = proc_pidpath (pid, buf, sizeof(buf));
-+  if (ret <= 0)
-+    return XRE_main(argc, argv, &sAppData, 0);
-+  buf[ret-8] = 0; // removing "/firefox"
-+  char profdir[4096];
-+  sprintf(profdir, "%s/720Browser", buf);
-+  char* firefox = "firefox";
-+  char* profile = "-profile";
-+  char* argvv[] = {firefox, profile, profdir};
-+  return XRE_main(3, argvv, &sAppData, 0);
-+#else
-   return XRE_main(argc, argv, &sAppData, 0);
++  ret = proc_pidpath (pid, container, sizeof(container));
++  if (ret > 0) {
++    if (container[ret-1]=='x')
++      container[ret-7] = '\0'; // removing "firefox"
++    else if (container[ret-1]=='n')
++      container[ret-11] = '\0'; // removing "firefox-bin"
++    else
++      ret = 0;
++    if (ret>0) {
++      char useff[MAXPATHLEN];
++      char env[MAXPATHLEN];
++      snprintf(useff, MAXPATHLEN, "%s/.use-firefox-profile", container);
++      if (access(useff, F_OK))
++        snprintf(env, MAXPATHLEN, "XUL_APP_FILE=%s/application.ini", container);
++      else
++        snprintf(env, MAXPATHLEN, "XUL_APP_FILE=%s/720browser.ini", container);
++      putenv(env);
++    }
++  }
 +#endif
- }
- 
- #ifdef XP_WIN
- /**
-  * Determines if the registry is disabled via the service or not.
-  * 
-  * @return true if prefetch is disabled
-  *         false if prefetch is not disabled or an error occurred.
++
+   // Allow firefox.exe to launch XULRunner apps via -app <application.ini>
+   // Note that -app must be the *first* argument.
+   const char *appDataFile = getenv("XUL_APP_FILE");
 diff -r 0b774a1067fe security/nss/lib/ckfw/builtins/certdata.c
 --- a/security/nss/lib/ckfw/builtins/certdata.c	Wed Sep 05 14:59:17 2012 -0700
-+++ b/security/nss/lib/ckfw/builtins/certdata.c	Mon Sep 10 11:44:57 2012 +0800
-@@ -721,22 +721,16 @@ static const CK_ATTRIBUTE_TYPE nss_built
-  CKA_CLASS,  CKA_TOKEN,  CKA_PRIVATE,  CKA_MODIFIABLE,  CKA_LABEL,  CKA_CERT_SHA1_HASH,  CKA_CERT_MD5_HASH,  CKA_ISSUER,  CKA_SERIAL_NUMBER,  CKA_TRUST_SERVER_AUTH,  CKA_TRUST_EMAIL_PROTECTION,  CKA_TRUST_CODE_SIGNING,  CKA_TRUST_STEP_UP_APPROVED
- };
- static const CK_ATTRIBUTE_TYPE nss_builtins_types_222 [] = {
-  CKA_CLASS,  CKA_TOKEN,  CKA_PRIVATE,  CKA_MODIFIABLE,  CKA_LABEL,  CKA_CERTIFICATE_TYPE,  CKA_SUBJECT,  CKA_ID,  CKA_ISSUER,  CKA_SERIAL_NUMBER,  CKA_VALUE
- };
++++ b/security/nss/lib/ckfw/builtins/certdata.c	Wed Sep 12 15:50:07 2012 +0800
+@@ -726,12 +726,6 @@
  static const CK_ATTRIBUTE_TYPE nss_builtins_types_223 [] = {
   CKA_CLASS,  CKA_TOKEN,  CKA_PRIVATE,  CKA_MODIFIABLE,  CKA_LABEL,  CKA_CERT_SHA1_HASH,  CKA_CERT_MD5_HASH,  CKA_ISSUER,  CKA_SERIAL_NUMBER,  CKA_TRUST_SERVER_AUTH,  CKA_TRUST_EMAIL_PROTECTION,  CKA_TRUST_CODE_SIGNING,  CKA_TRUST_STEP_UP_APPROVED
  };
@@ -81,17 +64,7 @@ diff -r 0b774a1067fe security/nss/lib/ckfw/builtins/certdata.c
  static const CK_ATTRIBUTE_TYPE nss_builtins_types_226 [] = {
   CKA_CLASS,  CKA_TOKEN,  CKA_PRIVATE,  CKA_MODIFIABLE,  CKA_LABEL,  CKA_CERTIFICATE_TYPE,  CKA_SUBJECT,  CKA_ID,  CKA_ISSUER,  CKA_SERIAL_NUMBER,  CKA_VALUE
  };
- static const CK_ATTRIBUTE_TYPE nss_builtins_types_227 [] = {
-  CKA_CLASS,  CKA_TOKEN,  CKA_PRIVATE,  CKA_MODIFIABLE,  CKA_LABEL,  CKA_CERT_SHA1_HASH,  CKA_CERT_MD5_HASH,  CKA_ISSUER,  CKA_SERIAL_NUMBER,  CKA_TRUST_SERVER_AUTH,  CKA_TRUST_EMAIL_PROTECTION,  CKA_TRUST_CODE_SIGNING,  CKA_TRUST_STEP_UP_APPROVED
- };
- static const CK_ATTRIBUTE_TYPE nss_builtins_types_228 [] = {
-  CKA_CLASS,  CKA_TOKEN,  CKA_PRIVATE,  CKA_MODIFIABLE,  CKA_LABEL,  CKA_CERTIFICATE_TYPE,  CKA_SUBJECT,  CKA_ID,  CKA_ISSUER,  CKA_SERIAL_NUMBER,  CKA_VALUE
-@@ -15030,115 +15024,16 @@ static const NSSItem nss_builtins_items_
- , (PRUint32)61 },
-   { (void *)"\002\006\040\006\005\026\160\002"
- , (PRUint32)8 },
-   { (void *)&ckt_nss_trusted_delegator, (PRUint32)sizeof(CK_TRUST) },
-   { (void *)&ckt_nss_trusted_delegator, (PRUint32)sizeof(CK_TRUST) },
+@@ -15035,105 +15029,6 @@
    { (void *)&ckt_nss_trusted_delegator, (PRUint32)sizeof(CK_TRUST) },
    { (void *)&ck_false, (PRUint32)sizeof(CK_BBOOL) }
  };
@@ -197,17 +170,7 @@ diff -r 0b774a1067fe security/nss/lib/ckfw/builtins/certdata.c
  static const NSSItem nss_builtins_items_226 [] = {
    { (void *)&cko_certificate, (PRUint32)sizeof(CK_OBJECT_CLASS) },
    { (void *)&ck_true, (PRUint32)sizeof(CK_BBOOL) },
-   { (void *)&ck_false, (PRUint32)sizeof(CK_BBOOL) },
-   { (void *)&ck_false, (PRUint32)sizeof(CK_BBOOL) },
-   { (void *)"ApplicationCA - Japanese Government", (PRUint32)36 },
-   { (void *)&ckc_x_509, (PRUint32)sizeof(CK_CERTIFICATE_TYPE) },
-   { (void *)"\060\103\061\013\060\011\006\003\125\004\006\023\002\112\120\061"
-@@ -23863,18 +23758,16 @@ nss_builtins_data[] = {
-   { 11, nss_builtins_types_216, nss_builtins_items_216, {NULL} },
-   { 13, nss_builtins_types_217, nss_builtins_items_217, {NULL} },
-   { 11, nss_builtins_types_218, nss_builtins_items_218, {NULL} },
-   { 13, nss_builtins_types_219, nss_builtins_items_219, {NULL} },
-   { 11, nss_builtins_types_220, nss_builtins_items_220, {NULL} },
+@@ -23868,8 +23763,6 @@
    { 13, nss_builtins_types_221, nss_builtins_items_221, {NULL} },
    { 11, nss_builtins_types_222, nss_builtins_items_222, {NULL} },
    { 13, nss_builtins_types_223, nss_builtins_items_223, {NULL} },
@@ -216,17 +179,7 @@ diff -r 0b774a1067fe security/nss/lib/ckfw/builtins/certdata.c
    { 11, nss_builtins_types_226, nss_builtins_items_226, {NULL} },
    { 13, nss_builtins_types_227, nss_builtins_items_227, {NULL} },
    { 11, nss_builtins_types_228, nss_builtins_items_228, {NULL} },
-   { 13, nss_builtins_types_229, nss_builtins_items_229, {NULL} },
-   { 11, nss_builtins_types_230, nss_builtins_items_230, {NULL} },
-   { 13, nss_builtins_types_231, nss_builtins_items_231, {NULL} },
-   { 11, nss_builtins_types_232, nss_builtins_items_232, {NULL} },
-   { 13, nss_builtins_types_233, nss_builtins_items_233, {NULL} },
-@@ -23996,12 +23889,12 @@ nss_builtins_data[] = {
-   { 13, nss_builtins_types_349, nss_builtins_items_349, {NULL} },
-   { 11, nss_builtins_types_350, nss_builtins_items_350, {NULL} },
-   { 13, nss_builtins_types_351, nss_builtins_items_351, {NULL} },
-   { 11, nss_builtins_types_352, nss_builtins_items_352, {NULL} },
-   { 13, nss_builtins_types_353, nss_builtins_items_353, {NULL} }
+@@ -24001,7 +23894,7 @@
  };
  const PRUint32
  #ifdef DEBUG
@@ -238,13 +191,8 @@ diff -r 0b774a1067fe security/nss/lib/ckfw/builtins/certdata.c
  #endif /* DEBUG */
 diff -r 0b774a1067fe security/nss/lib/ckfw/builtins/certdata.txt
 --- a/security/nss/lib/ckfw/builtins/certdata.txt	Wed Sep 05 14:59:17 2012 -0700
-+++ b/security/nss/lib/ckfw/builtins/certdata.txt	Mon Sep 10 11:44:57 2012 +0800
-@@ -15109,125 +15109,16 @@ CKA_SERIAL_NUMBER MULTILINE_OCTAL
- \002\006\040\006\005\026\160\002
- END
- CKA_TRUST_SERVER_AUTH CK_TRUST CKT_NSS_TRUSTED_DELEGATOR
- CKA_TRUST_EMAIL_PROTECTION CK_TRUST CKT_NSS_TRUSTED_DELEGATOR
- CKA_TRUST_CODE_SIGNING CK_TRUST CKT_NSS_TRUSTED_DELEGATOR
++++ b/security/nss/lib/ckfw/builtins/certdata.txt	Wed Sep 12 15:50:07 2012 +0800
+@@ -15114,115 +15114,6 @@
  CKA_TRUST_STEP_UP_APPROVED CK_BBOOL CK_FALSE
  
  #
@@ -360,8 +308,3 @@ diff -r 0b774a1067fe security/nss/lib/ckfw/builtins/certdata.txt
  # Certificate "ApplicationCA - Japanese Government"
  #
  CKA_CLASS CK_OBJECT_CLASS CKO_CERTIFICATE
- CKA_TOKEN CK_BBOOL CK_TRUE
- CKA_PRIVATE CK_BBOOL CK_FALSE
- CKA_MODIFIABLE CK_BBOOL CK_FALSE
- CKA_LABEL UTF8 "ApplicationCA - Japanese Government"
- CKA_CERTIFICATE_TYPE CK_CERTIFICATE_TYPE CKC_X_509
