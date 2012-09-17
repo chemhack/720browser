@@ -1,4 +1,4 @@
-const t20brs=Components.classes["@720browser.com/t20brs;1"].getService().wrappedJSObject;
+const t20brs=Components.classes["@720browser.com/sshService;1"].getService().wrappedJSObject;
 
 function sshObserver()
 {
