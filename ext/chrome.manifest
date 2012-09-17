@@ -1,3 +1,5 @@
+component   {674913d5-670c-4202-a25a-5f32309c3a6c}  components/loggingService.js
+contract    @720browser.com/loggingService;1  {674913d5-670c-4202-a25a-5f32309c3a6c}
 component   {4E10EBDB-8977-4F4C-83E4-C7C0C6FECC92}  components/proxyService.js
 contract    @720browser.com/proxyService;1  {4E10EBDB-8977-4F4C-83E4-C7C0C6FECC92}
 component   {72036cf4-a0a6-48ad-85ae-061aa201f008}  components/sshService.js
