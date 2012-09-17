@@ -1,7 +1,7 @@
-component   {72036cf4-a0a6-48ad-85ae-061aa201f008}  components/sshService.js
-contract    @720browser.com/sshService;1  {72036cf4-a0a6-48ad-85ae-061aa201f008}
 component   {4E10EBDB-8977-4F4C-83E4-C7C0C6FECC92}  components/proxyService.js
 contract    @720browser.com/proxyService;1  {4E10EBDB-8977-4F4C-83E4-C7C0C6FECC92}
+component   {72036cf4-a0a6-48ad-85ae-061aa201f008}  components/sshService.js
+contract    @720browser.com/sshService;1  {72036cf4-a0a6-48ad-85ae-061aa201f008}
 category    profile-after-change 720Browser @720browser.com/sshService;1
 content     t20brs   chrome/content/
 locale      t20brs   en-US locale/
